@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About • Olivia Abdalla</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="about-page">
+    <header>
+        <div class="hamburger" id="hamburgerMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="main-title" style="top: 5%; left: 5%;">
+            <a href="index.html" style="text-decoration: none; color: inherit;">Olivia Abdalla</a>
+        </div>
+        <nav class="main-nav" id="navMenu">
+            <a href="index.html">Home</a>
+            <a href="about.html" class="active">About</a>
+            <a href="program.html">The Program</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="about-container">
+        <!-- Side-by-Side Intro Section -->
+        <section class="about-intro">
+            <!-- Single Photo Section -->
+            <div class="photo-single">
+                <div class="photo-placeholder">Portrait Placeholder</div>
+            </div>
+
+            <!-- Story Section -->
+            <div class="story-section">
+                <div class="heading-cursive">My Story</div>
+                <div class="bio-text">
+                    Olivia Abdalla is a filmmaker and writer dedicated to uncovering the intersection of identity,
+                    culture, and the human condition. With a background in film production and narrative direction, her
+                    work explores the unseen rhythms of everyday life through a cinematic lens.
+                    <br><br>
+                    Through "Black Girl Anthropology," she seeks to document and celebrate the varied textures of
+                    existence, blending visual poetry with rigorous storytelling. Her approach is characterized by an
+                    intentional use of space, light, and silence—creating immersive experiences that invite the viewer
+                    to see the world anew.
+                </div>
+            </div>
+        </section>
+
+        <!-- Focus Areas -->
+        <section class="focus-section">
+            <h2>Focus Areas</h2>
+            <div class="focus-grid">
+                <span class="focus-tag">Film Production</span>
+                <span class="focus-tag">Creative Writing</span>
+                <span class="focus-tag">Visual Storytelling</span>
+                <span class="focus-tag">Identity & Culture</span>
+                <span class="focus-tag">Narrative Direction</span>
+            </div>
+        </section>
+    </main>
+
+    <footer style="position: relative; padding: 40px 0; text-align: center;">
+        <div class="bottom-signature" style="position: relative; opacity: 1;">
+            Black Girl Anthropology
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburgerMenu');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>

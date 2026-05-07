@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Portfolio Directory</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="contact-page">
+    <div class="hamburger" id="hamburgerMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="main-nav" id="navMenu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="program.html">The Program</a>
+        <a href="contact.html" class="active">Contact</a>
+    </nav>
+
+    <!-- Main Title (Top Left) -->
+    <div class="main-title" contenteditable="true" style="position: absolute; top: 3%; left: 4%; transform: rotate(-2deg); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; text-transform: uppercase; font-size: clamp(3rem, 6vw, 5rem); color: #2b2524; z-index: 10; pointer-events: none;">
+        Olivia Abdalla
+    </div>
+
+    <div class="typewriter-container">
+        <button id="soundToggle" class="sound-toggle">Sound: OFF</button>
+        <div class="paper-roll-top">
+            <div class="roll-texture"></div>
+        </div>
+        <div class="paper-sheet" id="paperSheet">
+            <div class="typed-content" id="typedContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const hamburger = document.getElementById('hamburgerMenu');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Typewriter logic
+        const lines = [
+            { text: "LinkedIn", url: "#", target: "_blank" },
+            { text: "Email", url: "mailto:#", target: "" },
+            { text: "Resume", url: "#", target: "", download: true }
+        ];
+
+        const container = document.getElementById('typedContent');
+        const paper = document.getElementById('paperSheet');
+        const soundToggle = document.getElementById('soundToggle');
+
+        let soundEnabled = false;
+        let audioCtx = null;
+
+        // Toggle sound and initialize AudioContext on user interaction to bypass autoplay restrictions
+        soundToggle.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            soundToggle.textContent = soundEnabled ? 'Sound: ON' : 'Sound: OFF';
+            if (soundEnabled && !audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (soundEnabled && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        });
+
+        function playTypeSound() {
+            if (!soundEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'square';
+                // Typewriter clack pitch
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.03);
+                
+                // Very short percussive envelope
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.03);
+            } catch(e) {}
+        }
+
+        let currentLineIndex = 0;
+
+        function typeLines() {
+            if (currentLineIndex >= lines.length) return;
+
+            const lineData = lines[currentLineIndex];
+            const a = document.createElement('a');
+            a.href = lineData.url;
+            if (lineData.target) a.target = lineData.target;
+            if (lineData.download) a.setAttribute('download', '');
+            a.className = 'typed-line typing';
+            container.appendChild(a);
+
+            let charIndex = 0;
+
+            function typeChar() {
+                if (charIndex < lineData.text.length) {
+                    a.textContent += lineData.text.charAt(charIndex);
+                    playTypeSound();
+                    charIndex++;
+                    // Random delay between characters for realistic typing (50ms - 150ms)
+                    setTimeout(typeChar, 50 + Math.random() * 100); 
+                } else {
+                    // Line finished
+                    a.classList.remove('typing');
+                    a.classList.add('finished');
+                    currentLineIndex++;
+                    // Wait before starting the next line (carriage return delay)
+                    setTimeout(typeLines, 600); 
+                }
+            }
+
+            typeChar();
+        }
+
+        // Trigger unfurl and typing on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                paper.classList.add('unfurled');
+                // Start typing before the paper finishes unfurling
+                setTimeout(typeLines, 1200);
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

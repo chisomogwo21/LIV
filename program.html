@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Program • Olivia Abdalla</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Caveat:wght@600&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+    <style>
+        body.program-page {
+            background-color: #ff6eb4;
+            /* Hot pink / Bubblegum pink */
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Interactive Workspace */
+        .workspace {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: max(450px, 40vh);
+            padding-bottom: 50vh;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .interactive-folder-container {
+            position: relative;
+            width: 700px;
+            max-width: 90vw;
+            transform: translateY(0);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            user-select: none;
+            z-index: 10;
+        }
+
+        .workspace.is-open .interactive-folder-container {
+            transform: translateY(0);
+        }
+
+        .workspace.content-open .interactive-folder-container {
+            transform: translateY(-80px);
+        }
+
+        .main-folder {
+            width: 100%;
+            display: block;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .main-folder:hover {
+            transform: scale(1.02);
+        }
+
+        .tabs-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .file-tab {
+            position: absolute;
+            bottom: 5%;
+            left: 2%;
+            width: 96%;
+            height: 90%;
+            z-index: 1;
+            transform: translateY(0);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .workspace.is-open .file-tab {
+            opacity: 1;
+        }
+
+        /* Stagger translations */
+        .workspace.is-open .tab-1 {
+            transform: translateY(-150px);
+            transition-delay: 0.15s;
+        }
+
+        .workspace.is-open .tab-2 {
+            transform: translateY(-110px);
+            transition-delay: 0.10s;
+        }
+
+        .workspace.is-open .tab-3 {
+            transform: translateY(-70px);
+            transition-delay: 0.05s;
+        }
+
+        .workspace.is-open .tab-4 {
+            transform: translateY(-30px);
+            transition-delay: 0s;
+        }
+
+        .workspace.is-open .tab-1:hover {
+            transform: translateY(-160px);
+        }
+
+        .workspace.is-open .tab-2:hover {
+            transform: translateY(-120px);
+        }
+
+        .workspace.is-open .tab-3:hover {
+            transform: translateY(-80px);
+        }
+
+        .workspace.is-open .tab-4:hover {
+            transform: translateY(-40px);
+        }
+
+        .workspace.is-open .tab-1.active {
+            transform: translateY(-170px);
+        }
+
+        .workspace.is-open .tab-2.active {
+            transform: translateY(-130px);
+        }
+
+        .workspace.is-open .tab-3.active {
+            transform: translateY(-90px);
+        }
+
+        .workspace.is-open .tab-4.active {
+            transform: translateY(-50px);
+        }
+
+        .tab-header {
+            height: 45px;
+            position: absolute;
+            top: -45px;
+            width: 100%;
+            display: flex;
+        }
+
+        .tab-label {
+            position: absolute;
+            height: 100%;
+            padding: 0 30px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .file-edge {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Tab specific colors and positions */
+        .tab-1 .tab-label,
+        .tab-1 .file-edge {
+            background-color: #8c9751;
+            color: white;
+        }
+
+        .tab-2 .tab-label,
+        .tab-2 .file-edge {
+            background-color: #f7f6ec;
+            color: #db6a8b;
+        }
+
+        .tab-3 .tab-label,
+        .tab-3 .file-edge {
+            background-color: #1a1716;
+            color: white;
+        }
+
+        .tab-4 .tab-label,
+        .tab-4 .file-edge {
+            background-color: #f290b2;
+            color: #fff;
+        }
+
+        .tab-1 {
+            z-index: 1;
+        }
+
+        .tab-2 {
+            z-index: 2;
+        }
+
+        .tab-3 {
+            z-index: 3;
+        }
+
+        .tab-4 {
+            z-index: 4;
+        }
+
+        .content-panel-wrapper {
+            position: relative;
+            width: 680px;
+            max-width: 90vw;
+            height: 400px;
+            margin-top: -100px;
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .content-panel {
+            width: 100%;
+            height: 100%;
+            background-color: #dac7ad;
+            /* Matching beige/kraft */
+            border-radius: 8px;
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 0 80px rgba(100, 70, 40, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workspace.content-open .content-panel-wrapper {
+            pointer-events: auto;
+        }
+
+        .workspace.content-open .content-panel {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .click-indicator {
+            position: absolute;
+            top: -40px;
+            right: 15%;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            color: #1a1716;
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            transform: rotate(12deg);
+            z-index: 20;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .workspace.is-open .click-indicator {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="program-page">
+    <header>
+        <div class="hamburger" id="hamburgerMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="main-title" style="top: 5%; left: 5%;">
+            <a href="index.html" style="text-decoration: none; color: inherit;">Olivia Abdalla</a>
+        </div>
+        <nav class="main-nav" id="navMenu">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="program.html" class="active">The Program</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="workspace" id="workspace">
+        <div class="interactive-folder-container">
+            <div class="tabs-container">
+                <div class="file-tab tab-1" onclick="openTab(1, event)">
+                    <div class="tab-header">
+                        <div class="tab-label" style="left: 6%;">
+                            2025
+                            <div class="texture-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="file-edge">
+                        <div class="texture-overlay"></div>
+                    </div>
+                </div>
+                <div class="file-tab tab-2" onclick="openTab(2, event)">
+                    <div class="tab-header">
+                        <div class="tab-label" style="left: 20%;">
+                            Projects
+                            <div class="texture-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="file-edge">
+                        <div class="texture-overlay"></div>
+                    </div>
+                </div>
+                <div class="file-tab tab-3" onclick="openTab(3, event)">
+                    <div class="tab-header">
+                        <div class="tab-label" style="left: 65%;">
+                            Venus & Mars
+                            <div class="texture-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="file-edge">
+                        <div class="texture-overlay"></div>
+                    </div>
+                </div>
+                <div class="file-tab tab-4" onclick="openTab(4, event)">
+                    <div class="tab-header">
+                        <div class="tab-label" style="left: 28%;">
+                            Black Girl Anthropology
+                            <div class="texture-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="file-edge">
+                        <div class="texture-overlay"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main visual folder -->
+            <img src="assets/liv program file folder.png" class="main-folder" id="mainFolder" alt="Folder">
+
+            <div class="click-indicator">
+                <span>click here</span>
+                <svg width="45" height="65" viewBox="0 0 64 85" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="margin-top: 15px; transform: scaleX(-1) rotate(-10deg);">
+                    <path
+                        d="M48.5 4.5C30.5 0.5 12 18.5 24.5 35C38 52.5 59.5 32 40 24C16.5 14.5 5 45.5 17 68.5C21.5 77 30.5 83 40.5 81"
+                        stroke="#1a1716" stroke-width="4" stroke-linecap="round" />
+                    <path d="M26 73L40.5 81L36 65" stroke="#1a1716" stroke-width="4" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Content Panel sliding out from below -->
+        <div class="content-panel-wrapper">
+            <div class="content-panel" id="contentPanel">
+                <div class="texture-overlay"></div>
+                <!-- dynamic content will go here when tab is opened -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation hamburger menu
+        const hamburger = document.getElementById('hamburgerMenu');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Folder Interaction Logic
+        let isFolderOpen = false;
+        let activeTab = null;
+
+        const workspace = document.getElementById('workspace');
+        const mainFolder = document.getElementById('mainFolder');
+
+        mainFolder.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isFolderOpen) {
+                // Open folder to show tabs
+                isFolderOpen = true;
+                workspace.classList.add('is-open');
+
+                // Smooth scroll to perfectly frame tabs in viewport
+                setTimeout(() => {
+                    const folderEl = document.querySelector('.interactive-folder-container');
+                    const absoluteY = folderEl.getBoundingClientRect().top + window.scrollY;
+                    const targetScroll = absoluteY - (window.innerHeight * 0.6);
+                    window.scrollTo({
+                        top: Math.max(0, targetScroll),
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            } else {
+                // Collapse everything
+                closeCompletely();
+            }
+        });
+
+        function openTab(tabId, event) {
+            event.stopPropagation();
+
+            if (!isFolderOpen) {
+                isFolderOpen = true;
+                workspace.classList.add('is-open');
+            }
+
+            if (activeTab === tabId) {
+                // If same tab clicked, collapse content only
+                activeTab = null;
+                workspace.classList.remove('content-open');
+                document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+            } else {
+                // Open content panel for chosen tab
+                activeTab = tabId;
+                workspace.classList.add('content-open');
+
+                // Set active class
+                document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function closeCompletely() {
+            isFolderOpen = false;
+            activeTab = null;
+            workspace.classList.remove('is-open');
+            workspace.classList.remove('content-open');
+            document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+        }
+
+        // Close when clicking outside
+        workspace.addEventListener('click', (e) => {
+            if (e.target === workspace) {
+                closeCompletely();
+            }
+        });
+    </script>
+</body>
+
+</html>
