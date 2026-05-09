@@ -43,8 +43,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -57,7 +57,7 @@
 
         .blur-overlay.active {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: all;
             transition-delay: 0.6s;
         }
 
@@ -287,16 +287,16 @@
         }
 
         .content-panel-wrapper {
-            position: relative;
-            width: 680px;
-            max-width: 90vw;
-            height: 400px;
-            margin-top: -100px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
             pointer-events: none;
-            z-index: 200;
-            perspective: 1000px;
+            z-index: 500;
         }
 
         .content-panel {
@@ -312,13 +312,14 @@
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 0 80px rgba(100, 70, 40, 0.05);
             position: relative;
             overflow: hidden;
+            z-index: 500;
         }
 
-        .workspace.content-open .content-panel-wrapper {
+        .content-panel-wrapper.active {
             pointer-events: auto;
         }
 
-        .workspace.content-open .content-panel {
+        .content-panel-wrapper.active .content-panel {
             opacity: 1;
             transform: translateY(0) scale(1);
             transition-delay: 0.6s;
@@ -342,7 +343,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            z-index: 300;
+            z-index: 600;
         }
 
         .close-button:hover {
@@ -573,6 +574,46 @@
 
 <body class="program-page">
     <div class="blur-overlay" id="blurOverlay"></div>
+    <!-- Content Panel sliding out from below -->
+    <div class="content-panel-wrapper" id="contentPanelWrapper">
+        <div class="content-panel" id="contentPanel">
+            <div class="texture-overlay"></div>
+            <button class="close-button" id="closeButton">X</button>
+            
+            <!-- Creative Writing Panel -->
+            <div class="content-panel-inner" id="contentCreative">
+                <div class="writing-header">
+                    <h2 class="project-title">Venus & Mars</h2>
+                    <div class="writing-label">CREATIVE WRITING <span class="decorative-dot">•</span></div>
+                </div>
+                <div class="writing-body">
+                    <h3 class="writing-title">The Architect of Sound</h3>
+                    <p>It was a quiet morning when the first notes drifted through the open window, carried by the crisp autumn breeze. The sound was unlike anything heard in the city before—a delicate blend of mechanical precision and organic warmth that seemed to breathe life into the concrete streets.</p>
+                    <p>She had spent years perfecting the instrument, a complex array of brass tubes, glass resonating chambers, and taut silver wires. They called it the "Harmonic Engine," but to her, it was simply a voice. A way to translate the hidden frequencies of the world into something tangible, something that could be felt in the chest and understood without words.</p>
+                    <p>As the melody swelled, shifting from a low, mournful hum to a bright, triumphant crescendo, people stopped in their tracks. The usual rush of the morning commute slowed to a standstill. For a brief, shimmering moment, the entire block was united by a single, beautiful vibration.</p>
+                    <p>This was only the beginning. The engine was capable of much more, and she intended to find every note it had to offer.</p>
+                </div>
+            </div>
+
+            <!-- Short Film Panel -->
+            <div class="content-panel-inner" id="contentFilm">
+                <div class="writing-header">
+                    <h2 class="project-title">Black Girl Anthropology</h2>
+                    <div class="writing-label">SHORT FILM <span class="decorative-dot">•</span></div>
+                </div>
+                <div class="film-body">
+                    <div class="video-wrapper" id="videoWrapper">
+                        <video id="shortFilmVideo" src="https://www.w3schools.com/html/mov_bbb.mp4" preload="metadata"></video>
+                        <div class="play-overlay" id="playOverlay">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                    <a href="#" class="youtube-btn" target="_blank">Watch Full Film on YouTube ↗</a>
+                    <p class="film-description">A short documentary exploring the cultural impact and hidden histories of everyday life. This piece attempts to reframe the mundane into the extraordinary through intimate interviews and cinematic observation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <header>
         <div class="hamburger" id="hamburgerMenu">
             <span></span>
@@ -655,47 +696,6 @@
                 </svg>
             </div>
         </div>
-
-        <!-- Content Panel sliding out from below -->
-        <div class="content-panel-wrapper">
-            <div class="content-panel" id="contentPanel">
-                <div class="texture-overlay"></div>
-                <button class="close-button" id="closeButton">X</button>
-                
-                <!-- Creative Writing Panel -->
-                <div class="content-panel-inner" id="contentCreative">
-                    <div class="writing-header">
-                        <h2 class="project-title">Venus & Mars</h2>
-                        <div class="writing-label">CREATIVE WRITING <span class="decorative-dot">•</span></div>
-                    </div>
-                    <div class="writing-body">
-                        <h3 class="writing-title">The Architect of Sound</h3>
-                        <p>It was a quiet morning when the first notes drifted through the open window, carried by the crisp autumn breeze. The sound was unlike anything heard in the city before—a delicate blend of mechanical precision and organic warmth that seemed to breathe life into the concrete streets.</p>
-                        <p>She had spent years perfecting the instrument, a complex array of brass tubes, glass resonating chambers, and taut silver wires. They called it the "Harmonic Engine," but to her, it was simply a voice. A way to translate the hidden frequencies of the world into something tangible, something that could be felt in the chest and understood without words.</p>
-                        <p>As the melody swelled, shifting from a low, mournful hum to a bright, triumphant crescendo, people stopped in their tracks. The usual rush of the morning commute slowed to a standstill. For a brief, shimmering moment, the entire block was united by a single, beautiful vibration.</p>
-                        <p>This was only the beginning. The engine was capable of much more, and she intended to find every note it had to offer.</p>
-                    </div>
-                </div>
-
-                <!-- Short Film Panel -->
-                <div class="content-panel-inner" id="contentFilm">
-                    <div class="writing-header">
-                        <h2 class="project-title">Black Girl Anthropology</h2>
-                        <div class="writing-label">SHORT FILM <span class="decorative-dot">•</span></div>
-                    </div>
-                    <div class="film-body">
-                        <div class="video-wrapper" id="videoWrapper">
-                            <video id="shortFilmVideo" src="https://www.w3schools.com/html/mov_bbb.mp4" preload="metadata"></video>
-                            <div class="play-overlay" id="playOverlay">
-                                <div class="play-icon"></div>
-                            </div>
-                        </div>
-                        <a href="#" class="youtube-btn" target="_blank">Watch Full Film on YouTube ↗</a>
-                        <p class="film-description">A short documentary exploring the cultural impact and hidden histories of everyday life. This piece attempts to reframe the mundane into the extraordinary through intimate interviews and cinematic observation.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -727,7 +727,8 @@
 
                 // Smooth scroll to perfectly frame tabs in viewport
                 setTimeout(() => {
-                    const folderEl = document.querySelector('.interactive-folder-container');
+                    const contentPanelWrapper = document.getElementById('contentPanelWrapper');
+        const folderEl = document.querySelector('.interactive-folder-container');
                     const absoluteY = folderEl.getBoundingClientRect().top + window.scrollY;
                     const targetScroll = absoluteY - (window.innerHeight * 0.6);
                     window.scrollTo({
@@ -776,6 +777,7 @@
                 activeTab = tabId;
                 workspace.classList.add('content-open');
                 blurOverlay.classList.add('active');
+                contentPanelWrapper.classList.add('active');
 
                 // Set active class
                 document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
@@ -799,6 +801,7 @@
             workspace.classList.remove('is-open');
             workspace.classList.remove('content-open');
             blurOverlay.classList.remove('active');
+            contentPanelWrapper.classList.remove('active');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
 
             // Pause video
@@ -814,6 +817,7 @@
             activeTab = null;
             workspace.classList.remove('content-open');
             blurOverlay.classList.remove('active');
+            contentPanelWrapper.classList.remove('active');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
 
             // Pause video
