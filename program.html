@@ -354,7 +354,6 @@
             height: 100%;
             overflow-y: auto;
             padding: 50px 60px;
-            display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
@@ -429,6 +428,112 @@
             font-size: 1.2rem;
             line-height: 1.7;
             margin-bottom: 20px;
+        }
+
+        .content-panel-inner {
+            display: none;
+        }
+
+        .content-panel-inner.active {
+            display: flex;
+        }
+
+        .film-body {
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            cursor: pointer;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .play-overlay:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .play-icon::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #2b2524;
+            margin-left: 4px;
+        }
+
+        .video-wrapper.is-playing .play-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .youtube-btn {
+            display: inline-block;
+            background-color: #2b2524;
+            color: #dac7ad;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .youtube-btn:hover {
+            background-color: #1a1716;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .film-description {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.1rem;
+            color: #2b2524;
+            text-align: center;
+            line-height: 1.6;
+            margin-top: 5px;
+            opacity: 0.85;
         }
 
         @media (max-width: 768px) {
@@ -557,7 +662,8 @@
                 <div class="texture-overlay"></div>
                 <button class="close-button" id="closeButton">X</button>
                 
-                <div class="content-panel-inner" id="contentPanelInner">
+                <!-- Creative Writing Panel -->
+                <div class="content-panel-inner" id="contentCreative">
                     <div class="writing-header">
                         <h2 class="project-title">Venus & Mars</h2>
                         <div class="writing-label">CREATIVE WRITING <span class="decorative-dot">•</span></div>
@@ -568,6 +674,24 @@
                         <p>She had spent years perfecting the instrument, a complex array of brass tubes, glass resonating chambers, and taut silver wires. They called it the "Harmonic Engine," but to her, it was simply a voice. A way to translate the hidden frequencies of the world into something tangible, something that could be felt in the chest and understood without words.</p>
                         <p>As the melody swelled, shifting from a low, mournful hum to a bright, triumphant crescendo, people stopped in their tracks. The usual rush of the morning commute slowed to a standstill. For a brief, shimmering moment, the entire block was united by a single, beautiful vibration.</p>
                         <p>This was only the beginning. The engine was capable of much more, and she intended to find every note it had to offer.</p>
+                    </div>
+                </div>
+
+                <!-- Short Film Panel -->
+                <div class="content-panel-inner" id="contentFilm">
+                    <div class="writing-header">
+                        <h2 class="project-title">Black Girl Anthropology</h2>
+                        <div class="writing-label">SHORT FILM <span class="decorative-dot">•</span></div>
+                    </div>
+                    <div class="film-body">
+                        <div class="video-wrapper" id="videoWrapper">
+                            <video id="shortFilmVideo" src="https://www.w3schools.com/html/mov_bbb.mp4" preload="metadata"></video>
+                            <div class="play-overlay" id="playOverlay">
+                                <div class="play-icon"></div>
+                            </div>
+                        </div>
+                        <a href="#" class="youtube-btn" target="_blank">Watch Full Film on YouTube ↗</a>
+                        <p class="film-description">A short documentary exploring the cultural impact and hidden histories of everyday life. This piece attempts to reframe the mundane into the extraordinary through intimate interviews and cinematic observation.</p>
                     </div>
                 </div>
             </div>
@@ -620,6 +744,22 @@
         folderFront.addEventListener('click', toggleFolder);
         folderBack.addEventListener('click', toggleFolder);
 
+        const contentCreative = document.getElementById('contentCreative');
+        const contentFilm = document.getElementById('contentFilm');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const shortFilmVideo = document.getElementById('shortFilmVideo');
+        const playOverlay = document.getElementById('playOverlay');
+
+        videoWrapper.addEventListener('click', () => {
+            if (shortFilmVideo.paused) {
+                shortFilmVideo.play();
+                videoWrapper.classList.add('is-playing');
+            } else {
+                shortFilmVideo.pause();
+                videoWrapper.classList.remove('is-playing');
+            }
+        });
+
         function openTab(tabId, event) {
             event.stopPropagation();
 
@@ -630,9 +770,7 @@
 
             if (activeTab === tabId) {
                 // If same tab clicked, collapse content only
-                activeTab = null;
-                workspace.classList.remove('content-open');
-                document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+                closeContentPanel();
             } else {
                 // Open content panel for chosen tab
                 activeTab = tabId;
@@ -641,6 +779,16 @@
                 // Set active class
                 document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
                 event.currentTarget.classList.add('active');
+
+                // Toggle inner content based on tab
+                contentCreative.classList.remove('active');
+                contentFilm.classList.remove('active');
+
+                if (tabId === 3) {
+                    contentCreative.classList.add('active');
+                } else if (tabId === 4) {
+                    contentFilm.classList.add('active');
+                }
             }
         }
 
@@ -650,6 +798,12 @@
             workspace.classList.remove('is-open');
             workspace.classList.remove('content-open');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+
+            // Pause video
+            if (shortFilmVideo) {
+                shortFilmVideo.pause();
+                videoWrapper.classList.remove('is-playing');
+            }
         }
 
         // Close just the content panel when clicking X or blur overlay
@@ -658,6 +812,12 @@
             activeTab = null;
             workspace.classList.remove('content-open');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+
+            // Pause video
+            if (shortFilmVideo) {
+                shortFilmVideo.pause();
+                videoWrapper.classList.remove('is-playing');
+            }
         }
 
         closeButton.addEventListener('click', closeContentPanel);
