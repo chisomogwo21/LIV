@@ -40,6 +40,36 @@
         .loading-screen.visible .loading-text {
             transform: scale(1);
         }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #2b2524;
+            z-index: 9000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+            pointer-events: none;
+        }
+
+        .page-transition-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        body {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -47,6 +77,7 @@
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-text">liv</div>
     </div>
+    <div id="transitionOverlay" class="page-transition-overlay"></div>
     <header>
         <div class="hamburger" id="hamburgerMenu">
             <span></span>
@@ -116,10 +147,15 @@
             navMenu.classList.toggle('active');
         });
 
-        // Loading Screen Logic
+        // Loading Screen & Transitions
         window.addEventListener('DOMContentLoaded', () => {
             const loadingScreen = document.getElementById('loadingScreen');
-            if (!sessionStorage.getItem('hasSeenLoading')) {
+            const transitionOverlay = document.getElementById('transitionOverlay');
+
+            // Handle Initial Fade-In
+            document.body.classList.add('loaded');
+
+            if (loadingScreen && !sessionStorage.getItem('hasSeenLoading')) {
                 loadingScreen.classList.add('visible');
                 setTimeout(() => {
                     loadingScreen.classList.remove('visible');
@@ -128,9 +164,24 @@
                     }, 800);
                     sessionStorage.setItem('hasSeenLoading', 'true');
                 }, 1300);
-            } else {
+            } else if (loadingScreen) {
                 loadingScreen.remove();
             }
+
+            // Handle Page Transitions
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('#') && !link.hasAttribute('target')) {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        transitionOverlay.classList.add('active');
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 400);
+                    });
+                }
+            });
         });
     </script>
 </body>
