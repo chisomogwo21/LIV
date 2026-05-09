@@ -1137,6 +1137,15 @@
 
             const revealElements = document.querySelectorAll('.reveal');
             revealElements.forEach((el) => observer.observe(el));
+
+            // Fallback for Scroll Reveal
+            setTimeout(() => {
+                revealElements.forEach(el => {
+                    if (!el.classList.contains('revealed')) {
+                        el.classList.add('revealed');
+                    }
+                });
+            }, 1000);
         });
     </script>
 </body>
