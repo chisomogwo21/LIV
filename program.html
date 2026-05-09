@@ -866,7 +866,6 @@
                     <div class="file-edge">
                         <div class="texture-overlay"></div>
                     </div>
-                </div>
                 <div class="file-tab tab-4" onclick="openTab(4, event)">
                     <div class="tab-header">
                         <div class="tab-label" style="left: 28%;">
@@ -881,8 +880,6 @@
             </div>
             <!-- Front cover of the folder -->
             <img src="assets/liv program file folder.png" class="folder-front" id="folderFront" alt="Folder Cover">
-
-            </div>
         </div>
     </div> <!-- Close workspace -->
 
@@ -916,6 +913,9 @@
         const folderBack = document.getElementById('folderBack');
         const closeButton = document.getElementById('closeButton');
         const blurOverlay = document.getElementById('blurOverlay');
+        const contentPanelWrapper = document.getElementById('contentPanelWrapper');
+        const contentCreative = document.getElementById('contentCreative');
+        const contentFilm = document.getElementById('contentFilm');
 
         function toggleFolder(e) {
             e.stopPropagation();
@@ -1012,9 +1012,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const loadingScreen = document.getElementById('loadingScreen');
             const transitionOverlay = document.getElementById('transitionOverlay');
-            const contentCreative = document.getElementById('contentCreative');
-            const contentFilm = document.getElementById('contentFilm');
-            const contentPanelWrapper = document.getElementById('contentPanelWrapper');
             const videoWrapper = document.getElementById('videoWrapper');
             const shortFilmVideo = document.getElementById('shortFilmVideo');
             const playOverlay = document.getElementById('playOverlay');
