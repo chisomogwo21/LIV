@@ -796,9 +796,17 @@
             <!-- Short Film Panel -->
             <div class="content-panel-inner" id="contentFilm" style="display: none;">
                 <div class="writing-header">
-                    <h2 class="project-title">Rooted</h2>
+                    <h2 class="project-title">Black Girl Anthropology</h2>
                     <div class="writing-label">SHORT FILM <span class="decorative-dot">•</span></div>
                 </div>
+                <div class="film-body">
+                    <div class="video-wrapper" id="videoWrapper">
+                        <video id="shortFilmVideo" src="https://www.w3schools.com/html/mov_bbb.mp4" playsinline></video>
+                        <div class="play-overlay" id="playOverlay">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                    <a href="#" target="_blank" class="youtube-btn">Watch Full Film on YouTube ↗</a>
                     <p class="film-description">A short documentary exploring the cultural impact and hidden histories of everyday life. This piece attempts to reframe the mundane into the extraordinary through intimate interviews and cinematic observation.</p>
                 </div>
             </div>
@@ -934,9 +942,8 @@
         }
 
         folderFront.addEventListener('click', toggleFolder);
-        folderBack.addEventListener('click', toggleFolder);        const contentCreative = document.getElementById('contentCreative');
-        const contentFilm = document.getElementById('contentFilm');
-        const contentPanelWrapper = document.getElementById('contentPanelWrapper');
+        folderBack.addEventListener('click', toggleFolder);
+
         function openTab(tabId, event) {
             event.stopPropagation();
 
@@ -1005,6 +1012,24 @@
         window.addEventListener('DOMContentLoaded', () => {
             const loadingScreen = document.getElementById('loadingScreen');
             const transitionOverlay = document.getElementById('transitionOverlay');
+            const contentCreative = document.getElementById('contentCreative');
+            const contentFilm = document.getElementById('contentFilm');
+            const contentPanelWrapper = document.getElementById('contentPanelWrapper');
+            const videoWrapper = document.getElementById('videoWrapper');
+            const shortFilmVideo = document.getElementById('shortFilmVideo');
+            const playOverlay = document.getElementById('playOverlay');
+
+            if (videoWrapper && shortFilmVideo) {
+                videoWrapper.addEventListener('click', () => {
+                    if (shortFilmVideo.paused) {
+                        shortFilmVideo.play();
+                        videoWrapper.classList.add('is-playing');
+                    } else {
+                        shortFilmVideo.pause();
+                        videoWrapper.classList.remove('is-playing');
+                    }
+                });
+            }
 
             // Handle Initial Fade-In
             document.body.classList.add('loaded');
