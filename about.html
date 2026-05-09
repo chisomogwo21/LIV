@@ -123,6 +123,18 @@
                 cursor: auto !important;
             }
         }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -133,7 +145,7 @@
     <div id="transitionOverlay" class="page-transition-overlay"></div>
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-follower" id="follower"></div>
-    <header>
+    <header class="reveal">
         <div class="hamburger" id="hamburgerMenu">
             <span></span>
             <span></span>
@@ -154,12 +166,12 @@
         <!-- Side-by-Side Intro Section -->
         <section class="about-intro">
             <!-- Single Photo Section -->
-            <div class="photo-single">
+            <div class="photo-single reveal">
                 <div class="photo-placeholder">Portrait Placeholder</div>
             </div>
 
             <!-- Story Section -->
-            <div class="story-section">
+            <div class="story-section reveal">
                 <div class="heading-cursive">My Story</div>
                 <div class="bio-text">
                     Olivia Abdalla is a filmmaker and writer dedicated to uncovering the intersection of identity,
@@ -175,7 +187,7 @@
         </section>
 
         <!-- Focus Areas -->
-        <section class="focus-section">
+        <section class="focus-section reveal">
             <h2>Focus Areas</h2>
             <div class="focus-grid">
                 <span class="focus-tag">Film Production</span>
@@ -188,7 +200,7 @@
     </main>
 
     <footer style="position: relative; padding: 40px 0; text-align: center;">
-        <div class="bottom-signature" style="position: relative; opacity: 1;">
+        <div class="bottom-signature reveal" style="position: relative; opacity: 1;">
             Black Girl Anthropology
         </div>
     </footer>
@@ -271,6 +283,28 @@
                     follower.classList.remove('hover');
                 });
             });
+
+            // Scroll Reveal Logic
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                let delay = 0;
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('revealed');
+                        }, delay);
+                        delay += 100;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach((el) => observer.observe(el));
         });
     </script>
 </body>

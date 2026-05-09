@@ -705,6 +705,18 @@
                 cursor: auto !important;
             }
         }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -714,8 +726,7 @@
     </div>
     <div id="transitionOverlay" class="page-transition-overlay"></div>
     <div class="custom-cursor" id="cursor"></div>
-    <div class="cursor-follower" id="follower"></div>
-    <div class="blur-overlay" id="blurOverlay"></div>
+    <div class="cursor-follower" id="follower"></div>    <div class="blur-overlay" id="blurOverlay"></div>
     <!-- Content Panel sliding out from below -->
     <div class="content-panel-wrapper" id="contentPanelWrapper">
         <div class="content-panel" id="contentPanel">
@@ -738,19 +749,11 @@
             </div>
 
             <!-- Short Film Panel -->
-            <div class="content-panel-inner" id="contentFilm">
+            <div class="content-panel-inner" id="contentFilm" style="display: none;">
                 <div class="writing-header">
-                    <h2 class="project-title">Black Girl Anthropology</h2>
+                    <h2 class="project-title">Rooted</h2>
                     <div class="writing-label">SHORT FILM <span class="decorative-dot">•</span></div>
                 </div>
-                <div class="film-body">
-                    <div class="video-wrapper" id="videoWrapper">
-                        <video id="shortFilmVideo" src="https://www.w3schools.com/html/mov_bbb.mp4" preload="metadata"></video>
-                        <div class="play-overlay" id="playOverlay">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                    <a href="#" class="youtube-btn" target="_blank">Watch Full Film on YouTube ↗</a>
                     <p class="film-description">A short documentary exploring the cultural impact and hidden histories of everyday life. This piece attempts to reframe the mundane into the extraordinary through intimate interviews and cinematic observation.</p>
                 </div>
             </div>
@@ -1048,6 +1051,28 @@
                     follower.classList.remove('hover');
                 });
             });
+
+            // Scroll Reveal Logic
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                let delay = 0;
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('revealed');
+                        }, delay);
+                        delay += 100;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach((el) => observer.observe(el));
         });
     </script>
 </body>

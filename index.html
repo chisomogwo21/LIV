@@ -126,6 +126,18 @@
                 cursor: auto !important;
             }
         }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -142,49 +154,49 @@
             <span></span>
             <span></span>
         </div>
-        <nav class="main-nav" id="navMenu">
+        <nav class="main-nav reveal" id="navMenu">
             <a href="index.html" class="active">Home</a>
             <a href="about.html">About</a>
             <a href="program.html">The Program</a>
             <a href="contact.html">Contact</a>
         </nav>
-        <div class="hero-bg"></div>
+        <div class="hero-bg reveal"></div>
         <div class="hero-content full-screen-layout">
 
             <!-- Main Title Title -->
-            <div class="main-title" contenteditable="true">
+            <div class="main-title reveal" contenteditable="true">
                 Olivia Abdalla
             </div>
 
             <!-- Top Left -->
-            <div class="layout-item top-left" contenteditable="true">
+            <div class="layout-item top-left reveal" contenteditable="true">
                 <div class="heading-cursive">Creative Portfolio</div>
                 <p>Film • Writing • Visual Storytelling</p>
             </div>
 
             <!-- Top Right -->
-            <div class="layout-item top-right" contenteditable="true">
+            <div class="layout-item top-right reveal" contenteditable="true">
                 <div class="heading-cursive">Written & Visualized by</div>
                 <p>LIV</p>
             </div>
 
             <!-- Middle Left -->
-            <div class="layout-item mid-left" contenteditable="true">
+            <div class="layout-item mid-left reveal" contenteditable="true">
                 <div class="heading-cursive">Scene 01 • Portfolio</div>
             </div>
 
             <!-- Bottom Left -->
-            <div class="layout-item bottom-left" contenteditable="true">
+            <div class="layout-item bottom-left reveal" contenteditable="true">
                 <p>Exploring Identity, <br>Culture,<br>Emotion Through Film<br>B.G.A</p>
             </div>
 
             <!-- Bottom Middle -->
-            <div class="layout-item bottom-mid" contenteditable="true">
+            <div class="layout-item bottom-mid reveal" contenteditable="true">
                 <p> Black Girl Anthropology<br>Coming Soon</p>
             </div>
 
             <!-- Bottom Right -->
-            <div class="layout-item bottom-right" contenteditable="true">
+            <div class="layout-item bottom-right reveal" contenteditable="true">
                 <div class="heading-cursive">© 2026 Liv</div>
             </div>
         </div>
@@ -270,6 +282,28 @@
                     follower.classList.remove('hover');
                 });
             });
+
+            // Scroll Reveal Logic
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                let delay = 0;
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('revealed');
+                        }, delay);
+                        delay += 100; // 0.1s stagger
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach((el) => observer.observe(el));
         });
     </script>
 </body>

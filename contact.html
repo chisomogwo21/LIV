@@ -123,6 +123,18 @@
                 cursor: auto !important;
             }
         }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -138,7 +150,7 @@
         <span></span>
         <span></span>
     </div>
-    <nav class="main-nav" id="navMenu">
+    <nav class="main-nav reveal" id="navMenu">
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="program.html">The Program</a>
@@ -146,11 +158,11 @@
     </nav>
 
     <!-- Main Title (Top Left) -->
-    <div class="main-title" contenteditable="true" style="position: absolute; top: 3%; left: 4%; transform: rotate(-2deg); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; text-transform: uppercase; font-size: clamp(3rem, 6vw, 5rem); color: #2b2524; z-index: 10; pointer-events: none;">
+    <div class="main-title reveal" contenteditable="true" style="position: absolute; top: 3%; left: 4%; transform: rotate(-2deg); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; text-transform: uppercase; font-size: clamp(3rem, 6vw, 5rem); color: #2b2524; z-index: 10; pointer-events: none;">
         Olivia Abdalla
     </div>
 
-    <div class="typewriter-container">
+    <div class="typewriter-container reveal">
         <button id="soundToggle" class="sound-toggle">Sound: OFF</button>
         <div class="paper-roll-top">
             <div class="roll-texture"></div>
@@ -331,6 +343,28 @@
                     follower.classList.remove('hover');
                 });
             });
+
+            // Scroll Reveal Logic
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                let delay = 0;
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('revealed');
+                        }, delay);
+                        delay += 100;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach((el) => observer.observe(el));
         });
     </script>
 </body>
