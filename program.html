@@ -29,6 +29,7 @@
             justify-content: flex-start;
             padding-top: max(450px, 40vh);
             padding-bottom: 50vh;
+            perspective: 1500px;
         }
 
         header {
@@ -38,36 +39,86 @@
             z-index: 100;
         }
 
+        .blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 110, 180, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            transition-delay: 0s;
+        }
+
+        .workspace.content-open .blur-overlay {
+            opacity: 1;
+            pointer-events: auto;
+            transition-delay: 0.6s;
+        }
+
         .interactive-folder-container {
             position: relative;
             width: 700px;
             max-width: 90vw;
-            transform: translateY(0);
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(0) translateZ(0);
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transition-delay: 0.6s;
             user-select: none;
             z-index: 10;
         }
 
         .workspace.is-open .interactive-folder-container {
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0);
         }
 
         .workspace.content-open .interactive-folder-container {
-            transform: translateY(-80px);
+            transform: translateY(-80px) translateZ(150px);
+            transition-delay: 0s;
         }
 
-        .main-folder {
+        .folder-back {
             width: 100%;
             display: block;
             position: relative;
-            z-index: 10;
+            z-index: 0;
             cursor: pointer;
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: filter 0.8s cubic-bezier(0.25, 1, 0.5, 1), scale 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition-delay: 0.6s, 0s;
         }
 
-        .main-folder:hover {
-            transform: scale(1.02);
+        .folder-front {
+            width: 100%;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            cursor: pointer;
+            transform-origin: top center;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), scale 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition-delay: 0.3s, 0s;
+        }
+
+        .interactive-folder-container:not(.content-open):hover .folder-front,
+        .interactive-folder-container:not(.content-open):hover .folder-back {
+            scale: 1.02;
+        }
+
+        .workspace.content-open .folder-back {
+            filter: drop-shadow(0 60px 80px rgba(0, 0, 0, 0.3));
+            transition-delay: 0s, 0s;
+        }
+
+        .workspace.content-open .folder-front {
+            transform: rotateX(120deg);
+            transition-delay: 0.3s, 0s;
         }
 
         .tabs-container {
@@ -243,9 +294,9 @@
             margin-top: -100px;
             display: flex;
             justify-content: center;
-            perspective: 1000px;
             pointer-events: none;
-            z-index: 5;
+            z-index: 30;
+            perspective: 1000px;
         }
 
         .content-panel {
@@ -256,7 +307,8 @@
             border-radius: 8px;
             opacity: 0;
             transform: translateY(60px) scale(0.95);
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+            transition-delay: 0s;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 0 80px rgba(100, 70, 40, 0.05);
             position: relative;
             overflow: hidden;
@@ -269,6 +321,45 @@
         .workspace.content-open .content-panel {
             opacity: 1;
             transform: translateY(0) scale(1);
+            transition-delay: 0.6s;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(43, 37, 36, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: #2b2524;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-button:hover {
+            background: rgba(43, 37, 36, 0.2);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .workspace.content-open .interactive-folder-container {
+                transform: translateY(-40px) translateZ(80px);
+            }
+            .interactive-folder-container,
+            .folder-front,
+            .folder-back,
+            .content-panel {
+                transition-duration: 0.7s;
+            }
         }
 
         .click-indicator {
@@ -313,7 +404,10 @@
     </header>
 
     <div class="workspace" id="workspace">
+        <div class="blur-overlay" id="blurOverlay"></div>
         <div class="interactive-folder-container">
+            <!-- Back of the folder -->
+            <img src="assets/liv program file folder.png" class="folder-back" id="folderBack" alt="Folder Base">
             <div class="tabs-container">
                 <div class="file-tab tab-1" onclick="openTab(1, event)">
                     <div class="tab-header">
@@ -360,8 +454,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Main visual folder -->
-            <img src="assets/liv program file folder.png" class="main-folder" id="mainFolder" alt="Folder">
+            <!-- Front cover of the folder -->
+            <img src="assets/liv program file folder.png" class="folder-front" id="folderFront" alt="Folder Cover">
 
             <div class="click-indicator">
                 <span>click here</span>
@@ -380,6 +474,7 @@
         <div class="content-panel-wrapper">
             <div class="content-panel" id="contentPanel">
                 <div class="texture-overlay"></div>
+                <button class="close-button" id="closeButton">X</button>
                 <!-- dynamic content will go here when tab is opened -->
             </div>
         </div>
@@ -400,9 +495,12 @@
         let activeTab = null;
 
         const workspace = document.getElementById('workspace');
-        const mainFolder = document.getElementById('mainFolder');
+        const folderFront = document.getElementById('folderFront');
+        const folderBack = document.getElementById('folderBack');
+        const closeButton = document.getElementById('closeButton');
+        const blurOverlay = document.getElementById('blurOverlay');
 
-        mainFolder.addEventListener('click', (e) => {
+        function toggleFolder(e) {
             e.stopPropagation();
             if (!isFolderOpen) {
                 // Open folder to show tabs
@@ -423,7 +521,10 @@
                 // Collapse everything
                 closeCompletely();
             }
-        });
+        }
+
+        folderFront.addEventListener('click', toggleFolder);
+        folderBack.addEventListener('click', toggleFolder);
 
         function openTab(tabId, event) {
             event.stopPropagation();
@@ -456,6 +557,17 @@
             workspace.classList.remove('content-open');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
         }
+
+        // Close just the content panel when clicking X or blur overlay
+        function closeContentPanel(e) {
+            if (e) e.stopPropagation();
+            activeTab = null;
+            workspace.classList.remove('content-open');
+            document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+        }
+
+        closeButton.addEventListener('click', closeContentPanel);
+        blurOverlay.addEventListener('click', closeContentPanel);
 
         // Close when clicking outside
         workspace.addEventListener('click', (e) => {
