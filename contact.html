@@ -9,9 +9,44 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Great+Vibes&display=swap"
         rel="stylesheet">
+    <style>
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #d4d925;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        .loading-screen.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .loading-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 8rem;
+            color: #2b2524;
+            transform: scale(0.9);
+            transition: transform 1.3s ease;
+        }
+        .loading-screen.visible .loading-text {
+            transform: scale(1);
+        }
+    </style>
 </head>
 
 <body class="contact-page">
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-text">liv</div>
+    </div>
     <div class="hamburger" id="hamburgerMenu">
         <span></span>
         <span></span>
@@ -134,11 +169,28 @@
 
         // Trigger unfurl and typing on load
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                paper.classList.add('unfurled');
-                // Start typing before the paper finishes unfurling
-                setTimeout(typeLines, 1200);
-            }, 300);
+            const loadingScreen = document.getElementById('loadingScreen');
+            const startTypewriter = () => {
+                setTimeout(() => {
+                    paper.classList.add('unfurled');
+                    setTimeout(typeLines, 1200);
+                }, 300);
+            };
+
+            if (!sessionStorage.getItem('hasSeenLoading')) {
+                loadingScreen.classList.add('visible');
+                setTimeout(() => {
+                    loadingScreen.classList.remove('visible');
+                    setTimeout(() => {
+                        loadingScreen.remove();
+                        startTypewriter();
+                    }, 800);
+                    sessionStorage.setItem('hasSeenLoading', 'true');
+                }, 1300);
+            } else {
+                loadingScreen.remove();
+                startTypewriter();
+            }
         });
     </script>
 </body>

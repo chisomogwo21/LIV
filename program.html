@@ -591,9 +591,44 @@
             pointer-events: none;
         }
     </style>
+    <style>
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #d4d925;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        .loading-screen.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .loading-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 8rem;
+            color: #2b2524;
+            transform: scale(0.9);
+            transition: transform 1.3s ease;
+        }
+        .loading-screen.visible .loading-text {
+            transform: scale(1);
+        }
+    </style>
 </head>
 
 <body class="program-page">
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-text">liv</div>
+    </div>
     <div class="blur-overlay" id="blurOverlay"></div>
     <!-- Content Panel sliding out from below -->
     <div class="content-panel-wrapper" id="contentPanelWrapper">
@@ -855,6 +890,23 @@
         workspace.addEventListener('click', (e) => {
             if (e.target === workspace) {
                 closeCompletely();
+            }
+        });
+
+        // Loading Screen Logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (!sessionStorage.getItem('hasSeenLoading')) {
+                loadingScreen.classList.add('visible');
+                setTimeout(() => {
+                    loadingScreen.classList.remove('visible');
+                    setTimeout(() => {
+                        loadingScreen.remove();
+                    }, 800);
+                    sessionStorage.setItem('hasSeenLoading', 'true');
+                }, 1300);
+            } else {
+                loadingScreen.remove();
             }
         });
     </script>
