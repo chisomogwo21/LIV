@@ -73,6 +73,59 @@
         body.loaded {
             opacity: 1;
         }
+
+        /* Custom Cursor */
+        * {
+            cursor: none !important;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            background-color: #d4d925;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border: 2px solid #d4d925;
+            border-radius: 50%;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .custom-cursor.hover {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .cursor-follower.hover {
+            width: 48px;
+            height: 48px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 1024px) {
+            .custom-cursor, .cursor-follower {
+                display: none;
+            }
+            * {
+                cursor: auto !important;
+            }
+        }
     </style>
 </head>
 
@@ -81,6 +134,8 @@
         <div class="loading-text">liv</div>
     </div>
     <div id="transitionOverlay" class="page-transition-overlay"></div>
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor-follower" id="follower"></div>
     <section class="hero">
         <div class="hamburger" id="hamburgerMenu">
             <span></span>
@@ -180,6 +235,40 @@
                         }, 400);
                     });
                 }
+            });
+
+            // Custom Cursor Logic
+            const cursor = document.getElementById('cursor');
+            const follower = document.getElementById('follower');
+            let mouseX = 0, mouseY = 0;
+            let followerX = 0, followerY = 0;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            });
+
+            const render = () => {
+                followerX += (mouseX - followerX) * 0.15;
+                followerY += (mouseY - followerY) * 0.15;
+                follower.style.left = followerX + 'px';
+                follower.style.top = followerY + 'px';
+                requestAnimationFrame(render);
+            };
+            render();
+
+            const hoverables = document.querySelectorAll('a, button, .file-tab, .folder-front, .folder-back, [contenteditable="true"]');
+            hoverables.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                    follower.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                    follower.classList.remove('hover');
+                });
             });
         });
     </script>
