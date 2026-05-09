@@ -706,18 +706,6 @@
             }
         }
 
-        /* Scroll Reveal Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-        }
-
-        .reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* Common Footer Styles */
         .site-footer {
             padding: 1.5rem 3rem;
@@ -1115,37 +1103,6 @@
                     follower.classList.remove('hover');
                 });
             });
-
-            // Scroll Reveal Logic
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                let delay = 0;
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('revealed');
-                        }, delay);
-                        delay += 100;
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            const revealElements = document.querySelectorAll('.reveal');
-            revealElements.forEach((el) => observer.observe(el));
-
-            // Fallback for Scroll Reveal
-            setTimeout(() => {
-                revealElements.forEach(el => {
-                    if (!el.classList.contains('revealed')) {
-                        el.classList.add('revealed');
-                    }
-                });
-            }, 1000);
         });
     </script>
 </body>
