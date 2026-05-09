@@ -300,19 +300,20 @@
         }
 
         .content-panel {
-            width: 100%;
-            height: 100%;
-            background-color: #dac7ad;
-            /* Matching beige/kraft */
+            width: 75vw;
+            max-width: 900px;
+            max-height: 80vh;
+            background-color: #e8d5b0;
             border-radius: 8px;
             opacity: 0;
             transform: translateY(60px) scale(0.95);
             transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
             transition-delay: 0s;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 0 80px rgba(100, 70, 40, 0.05);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
             z-index: 500;
+            padding: 3rem;
         }
 
         .content-panel-wrapper.active {
@@ -327,8 +328,8 @@
 
         .close-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 1rem;
+            right: 1rem;
             width: 40px;
             height: 40px;
             background: rgba(43, 37, 36, 0.1);
