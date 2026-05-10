@@ -294,7 +294,12 @@
         <section class="about-intro">
             <!-- Single Photo Section -->
             <div class="photo-single reveal">
-                <div class="photo-placeholder">Portrait Placeholder</div>
+                <div class="photo-tilt-wrapper">
+                    <div class="photo-placeholder" id="tiltPhoto">
+                        <div class="photo-glare"></div>
+                        Portrait Placeholder
+                    </div>
+                </div>
             </div>
 
             <!-- Story Section -->
@@ -437,6 +442,34 @@
 
             const revealElements = document.querySelectorAll('.reveal');
             revealElements.forEach((el) => observer.observe(el));
+
+            // 3D Photo Tilt Logic
+            const tiltPhoto = document.getElementById('tiltPhoto');
+            if (tiltPhoto) {
+                tiltPhoto.addEventListener('mousemove', (e) => {
+                    const rect = tiltPhoto.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -15; // Max 15deg
+                    const rotateY = ((x - centerX) / centerX) * 15; // Max 15deg
+                    
+                    tiltPhoto.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+                    
+                    // Update glare position
+                    const glareX = (x / rect.width) * 100;
+                    const glareY = (y / rect.height) * 100;
+                    tiltPhoto.style.setProperty('--glare-x', `${glareX}%`);
+                    tiltPhoto.style.setProperty('--glare-y', `${glareY}%`);
+                });
+
+                tiltPhoto.addEventListener('mouseleave', () => {
+                    tiltPhoto.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+                });
+            }
         });
     </script>
 </body>
