@@ -146,55 +146,55 @@
         }
 
         .workspace.is-open .tab-1 {
-            transform: translateY(-150px);
+            transform: translateY(-220px);
             transition-delay: 0.15s;
         }
 
         .workspace.is-open .tab-2 {
-            transform: translateY(-110px);
+            transform: translateY(-160px);
             transition-delay: 0.10s;
         }
 
         .workspace.is-open .tab-3 {
-            transform: translateY(-70px);
+            transform: translateY(-100px);
             transition-delay: 0.05s;
         }
 
         .workspace.is-open .tab-4 {
-            transform: translateY(-30px);
+            transform: translateY(-40px);
             transition-delay: 0s;
         }
 
         .workspace.is-open .tab-1:hover {
-            transform: translateY(-160px);
+            transform: translateY(-235px);
         }
 
         .workspace.is-open .tab-2:hover {
-            transform: translateY(-120px);
+            transform: translateY(-175px);
         }
 
         .workspace.is-open .tab-3:hover {
-            transform: translateY(-80px);
+            transform: translateY(-115px);
         }
 
         .workspace.is-open .tab-4:hover {
-            transform: translateY(-40px);
+            transform: translateY(-55px);
         }
 
         .workspace.is-open .tab-1.active {
-            transform: translateY(-170px);
+            transform: translateY(-245px);
         }
 
         .workspace.is-open .tab-2.active {
-            transform: translateY(-130px);
+            transform: translateY(-185px);
         }
 
         .workspace.is-open .tab-3.active {
-            transform: translateY(-90px);
+            transform: translateY(-125px);
         }
 
         .workspace.is-open .tab-4.active {
-            transform: translateY(-50px);
+            transform: translateY(-65px);
         }
 
         .tab-header {
@@ -298,7 +298,8 @@
         .content-panel {
             width: 75vw;
             max-width: 900px;
-            max-height: 80vh;
+            height: auto;
+            max-height: 85vh;
             background-color: #e8d5b0;
             border-radius: 8px;
             opacity: 0;
@@ -310,7 +311,10 @@
             overflow-y: auto;
             z-index: 500;
             padding: 3rem;
+            display: flex;
+            flex-direction: column;
         }
+
 
         .content-panel-wrapper.active {
             pointer-events: auto;
@@ -351,14 +355,16 @@
         .content-panel-inner {
             display: none;
             overflow-y: auto;
-            padding: 50px 60px;
+            padding: 30px 40px;
             flex-direction: column;
             align-items: center;
             position: relative;
             z-index: 5;
+            flex: 1;
             scrollbar-width: thin;
             scrollbar-color: rgba(43, 37, 36, 0.2) transparent;
         }
+
 
         .content-panel-inner::-webkit-scrollbar {
             width: 6px;
@@ -376,6 +382,7 @@
         .content-panel-inner.active {
             display: flex;
         }
+
 
         .writing-header {
             text-align: center;
@@ -554,7 +561,6 @@
             pointer-events: none;
         }
 
-        /* Loading Screen */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -588,7 +594,6 @@
             transform: scale(1);
         }
 
-        /* Page Transition */
         .page-transition-overlay {
             position: fixed;
             top: 0;
@@ -607,6 +612,74 @@
             opacity: 1;
             visibility: visible;
             pointer-events: all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-text {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: white;
+            text-transform: uppercase;
+            position: relative;
+            display: none;
+        }
+
+        .page-transition-overlay.active .transition-text {
+            display: block;
+            animation: glitch-skew 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+        }
+
+        .transition-text::before,
+        .transition-text::after {
+            content: "Olivia Abdalla";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .transition-text::before {
+            color: rgba(255, 0, 0, 0.7);
+            z-index: -1;
+            animation: glitch-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+
+        .transition-text::after {
+            color: rgba(0, 255, 255, 0.7);
+            z-index: -2;
+            animation: glitch-anim2 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 2px); }
+            40% { transform: translate(-3px, -2px); }
+            60% { transform: translate(3px, 2px); }
+            80% { transform: translate(3px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(3px, -2px); }
+            40% { transform: translate(3px, 2px); }
+            60% { transform: translate(-3px, -2px); }
+            80% { transform: translate(-3px, 2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(2deg); }
+            40% { transform: skew(-3deg); }
+            60% { transform: skew(1deg); }
+            80% { transform: skew(-1deg); }
+            100% { transform: skew(0deg); }
         }
 
         body {
@@ -618,7 +691,6 @@
             opacity: 1;
         }
 
-        /* Custom Cursor */
         * {
             cursor: none !important;
         }
@@ -674,7 +746,6 @@
             }
         }
 
-        /* Footer */
         .site-footer {
             padding: 1.5rem 3rem;
             border-top: 0.5px solid rgba(0, 0, 0, 0.15);
@@ -774,18 +845,18 @@
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-text">liv</div>
     </div>
-    <div id="transitionOverlay" class="page-transition-overlay"></div>
+    <div id="transitionOverlay" class="page-transition-overlay">
+        <div class="transition-text">Olivia Abdalla</div>
+    </div>
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-follower" id="follower"></div>
     <div class="blur-overlay" id="blurOverlay"></div>
 
-    <!-- Content Panel -->
     <div class="content-panel-wrapper" id="contentPanelWrapper">
         <div class="content-panel" id="contentPanel">
             <div class="texture-overlay"></div>
             <button class="close-button" id="closeButton">X</button>
 
-            <!-- Creative Writing Panel -->
             <div class="content-panel-inner" id="contentCreative">
                 <div class="writing-header">
                     <h2 class="project-title">Venus & Mars</h2>
@@ -810,7 +881,6 @@
                 </div>
             </div>
 
-            <!-- Short Film Panel -->
             <div class="content-panel-inner" id="contentFilm">
                 <div class="writing-header">
                     <h2 class="project-title">Black Girl Anthropology</h2>
@@ -851,16 +921,13 @@
 
     <div class="workspace" id="workspace">
         <div class="interactive-folder-container">
-            <!-- Back of the folder -->
             <img src="assets/liv program file folder.png" class="folder-back" id="folderBack" alt="Folder Base">
 
             <div class="tabs-container">
-                <!-- TAB 1 -->
                 <div class="file-tab tab-1" onclick="openTab(1, event)">
                     <div class="tab-header">
-                        <div class="tab-label" style="left: 6%;">
-                            Black Girl Anthropology
-                            <div class="texture-overlay"></div>
+                        <div class="tab-label" style="left: 4%;">Black Girl Anthropology<div class="texture-overlay">
+                            </div>
                         </div>
                     </div>
                     <div class="file-edge">
@@ -868,12 +935,9 @@
                     </div>
                 </div>
 
-                <!-- TAB 2 -->
                 <div class="file-tab tab-2" onclick="openTab(2, event)">
                     <div class="tab-header">
-                        <div class="tab-label" style="left: 20%;">
-                            Venus & Mars
-                            <div class="texture-overlay"></div>
+                        <div class="tab-label" style="left: 30%;">Venus & Mars<div class="texture-overlay"></div>
                         </div>
                     </div>
                     <div class="file-edge">
@@ -881,12 +945,9 @@
                     </div>
                 </div>
 
-                <!-- TAB 3 -->
                 <div class="file-tab tab-3" onclick="openTab(3, event)">
                     <div class="tab-header">
-                        <div class="tab-label" style="left: 65%;">
-                            2024
-                            <div class="texture-overlay"></div>
+                        <div class="tab-label" style="right: 4%; left: auto;">2024<div class="texture-overlay"></div>
                         </div>
                     </div>
                     <div class="file-edge">
@@ -894,12 +955,10 @@
                     </div>
                 </div>
 
-                <!-- TAB 4 -->
                 <div class="file-tab tab-4" onclick="openTab(4, event)">
                     <div class="tab-header">
-                        <div class="tab-label" style="left: 28%;">
-                            B.G.A
-                            <div class="texture-overlay"></div>
+                        <div class="tab-label" style="left: 50%; transform: translateX(-50%);">B.G.A<div
+                                class="texture-overlay"></div>
                         </div>
                     </div>
                     <div class="file-edge">
@@ -908,10 +967,8 @@
                 </div>
             </div>
 
-            <!-- Front cover of the folder -->
             <img src="assets/liv program file folder.png" class="folder-front" id="folderFront" alt="Folder Cover">
 
-            <!-- Click indicator -->
             <div class="click-indicator">
                 <span>click here</span>
                 <svg width="45" height="65" viewBox="0 0 64 85" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -938,7 +995,6 @@
     </footer>
 
     <script>
-        // ── Top-level DOM references ──────────────────────────────────────────
         const hamburger = document.getElementById('hamburgerMenu');
         const navMenu = document.getElementById('navMenu');
         const workspace = document.getElementById('workspace');
@@ -952,17 +1008,14 @@
         const videoWrapper = document.getElementById('videoWrapper');
         const shortFilmVideo = document.getElementById('shortFilmVideo');
 
-        // ── State ─────────────────────────────────────────────────────────────
         let isFolderOpen = false;
         let activeTab = null;
 
-        // ── Hamburger ─────────────────────────────────────────────────────────
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
 
-        // ── Folder toggle ─────────────────────────────────────────────────────
         function toggleFolder(e) {
             e.stopPropagation();
             if (!isFolderOpen) {
@@ -982,7 +1035,6 @@
         folderFront.addEventListener('click', toggleFolder);
         folderBack.addEventListener('click', toggleFolder);
 
-        // ── Video play/pause ──────────────────────────────────────────────────
         if (videoWrapper && shortFilmVideo) {
             videoWrapper.addEventListener('click', () => {
                 if (shortFilmVideo.paused) {
@@ -995,40 +1047,33 @@
             });
         }
 
-        // ── Open tab ──────────────────────────────────────────────────────────
         function openTab(tabId, event) {
             event.stopPropagation();
-
             if (!isFolderOpen) {
                 isFolderOpen = true;
                 workspace.classList.add('is-open');
             }
-
             if (activeTab === tabId) {
                 closeContentPanel();
                 return;
             }
-
             activeTab = tabId;
             workspace.classList.add('content-open');
             blurOverlay.classList.add('active');
             contentPanelWrapper.classList.add('active');
-
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
-            contentCreative.classList.remove('active');
-            contentFilm.classList.remove('active');
+            contentCreative.style.display = 'none';
+            contentFilm.style.display = 'none';
 
-            // tabs 1 & 3 → creative writing   |   tabs 2 & 4 → short film
             if (tabId === 2 || tabId === 4) {
-                contentFilm.classList.add('active');
+                contentFilm.style.display = 'flex';
             } else {
-                contentCreative.classList.add('active');
+                contentCreative.style.display = 'flex';
             }
         }
 
-        // ── Close helpers ─────────────────────────────────────────────────────
         function closeCompletely() {
             isFolderOpen = false;
             activeTab = null;
@@ -1036,8 +1081,10 @@
             blurOverlay.classList.remove('active');
             contentPanelWrapper.classList.remove('active');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
-            if (shortFilmVideo) { shortFilmVideo.pause(); }
-            if (videoWrapper) { videoWrapper.classList.remove('is-playing'); }
+            contentCreative.style.display = 'none';
+            contentFilm.style.display = 'none';
+            if (shortFilmVideo) shortFilmVideo.pause();
+            if (videoWrapper) videoWrapper.classList.remove('is-playing');
         }
 
         function closeContentPanel(e) {
@@ -1047,25 +1094,22 @@
             blurOverlay.classList.remove('active');
             contentPanelWrapper.classList.remove('active');
             document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
-            if (shortFilmVideo) { shortFilmVideo.pause(); }
-            if (videoWrapper) { videoWrapper.classList.remove('is-playing'); }
+            contentCreative.style.display = 'none';
+            contentFilm.style.display = 'none';
+            if (shortFilmVideo) shortFilmVideo.pause();
+            if (videoWrapper) videoWrapper.classList.remove('is-playing');
         }
 
         closeButton.addEventListener('click', closeContentPanel);
         blurOverlay.addEventListener('click', closeContentPanel);
-        workspace.addEventListener('click', (e) => {
-            if (e.target === workspace) closeCompletely();
-        });
+        workspace.addEventListener('click', (e) => { if (e.target === workspace) closeCompletely(); });
 
-        // ── DOMContentLoaded: loading screen, transitions, cursor ─────────────
         window.addEventListener('DOMContentLoaded', () => {
             const loadingScreen = document.getElementById('loadingScreen');
             const transitionOverlay = document.getElementById('transitionOverlay');
 
-            // Fade the page in
             document.body.classList.add('loaded');
 
-            // Loading screen (first visit only)
             if (loadingScreen && !sessionStorage.getItem('hasSeenLoading')) {
                 loadingScreen.classList.add('visible');
                 setTimeout(() => {
@@ -1077,7 +1121,6 @@
                 loadingScreen.remove();
             }
 
-            // Page transitions
             document.querySelectorAll('a').forEach(link => {
                 const href = link.getAttribute('href');
                 if (href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('#') && !link.hasAttribute('target')) {
@@ -1089,7 +1132,6 @@
                 }
             });
 
-            // Custom cursor
             const cursor = document.getElementById('cursor');
             const follower = document.getElementById('follower');
             let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;

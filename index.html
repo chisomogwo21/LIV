@@ -63,6 +63,74 @@
             opacity: 1;
             visibility: visible;
             pointer-events: all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-text {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: white;
+            text-transform: uppercase;
+            position: relative;
+            display: none;
+        }
+
+        .page-transition-overlay.active .transition-text {
+            display: block;
+            animation: glitch-skew 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+        }
+
+        .transition-text::before,
+        .transition-text::after {
+            content: "Olivia Abdalla";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .transition-text::before {
+            color: rgba(255, 0, 0, 0.7);
+            z-index: -1;
+            animation: glitch-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+
+        .transition-text::after {
+            color: rgba(0, 255, 255, 0.7);
+            z-index: -2;
+            animation: glitch-anim2 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 2px); }
+            40% { transform: translate(-3px, -2px); }
+            60% { transform: translate(3px, 2px); }
+            80% { transform: translate(3px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(3px, -2px); }
+            40% { transform: translate(3px, 2px); }
+            60% { transform: translate(-3px, -2px); }
+            80% { transform: translate(-3px, 2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(2deg); }
+            40% { transform: skew(-3deg); }
+            60% { transform: skew(1deg); }
+            80% { transform: skew(-1deg); }
+            100% { transform: skew(0deg); }
         }
 
         body {
@@ -202,7 +270,9 @@
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-text">liv</div>
     </div>
-    <div id="transitionOverlay" class="page-transition-overlay"></div>
+    <div id="transitionOverlay" class="page-transition-overlay">
+        <div class="transition-text">Olivia Abdalla</div>
+    </div>
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-follower" id="follower"></div>
     <section class="hero">
